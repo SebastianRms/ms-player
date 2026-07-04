@@ -6,20 +6,20 @@ import java.util.UUID;
 
 public record MicroHumanDTO(
         UUID id,
-        String nombre,
-        String sexo,
-        int hambre,
-        int energia,
-        int deseo
+        String name,
+        String sex,
+        int hunger,
+        int energy,
+        int desire
 ) {
     public static MicroHumanDTO fromEntity(MicroHumanEntity entity){
         return new MicroHumanDTO(
                 entity.id,
-                entity.nombre,
-                entity.sexo,
-                entity.hambre,
-                entity.energia,
-                entity.deseo
+                entity.name,
+                entity.sex,
+                entity.hunger,
+                entity.energy,
+                entity.desire
         );
     }
 }
