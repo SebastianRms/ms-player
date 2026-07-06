@@ -15,18 +15,18 @@ public class MicroHumanEntity extends PanacheEntityBase {
     public UUID id;
 
     @Column(nullable = false)
-    public String nombre;
+    public String name;
 
     @Column(nullable = false)
-    public String sexo;
+    public String sex;
 
     @Column(nullable = true)
-    public int hambre = 100;
+    public int hunger = 100;
 
     @Column(nullable = true)
-    public int energia = 100;
+    public int energy = 100;
 
     @Column(nullable = true)
-    public int deseo = 100;
+    public int desire = 100;
 
 }
