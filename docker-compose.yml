@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  postgres-microhumans:
+    image: postgres:15
+    container_name: db_microhumans
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: microhumans
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata_microhumans:/var/lib/postgresql/data
+
+volumes:
+  pgdata_microhumans:
