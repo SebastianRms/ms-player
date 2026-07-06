@@ -5,9 +5,13 @@ import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.NotFoundException;
+import org.microhumans.dto.CreateHumanRequest;
 import org.microhumans.dto.MicroHumanDTO;
+import org.microhumans.entity.MicroHumanEntity;
 import org.microhumans.repository.MicroHumanRepository;
 import org.microhumans.service.PlayerService;
+import io.quarkus.hibernate.reactive.panache.common.WithTransaction;
+import io.quarkus.hibernate.reactive.panache.common.WithSession;
 
 import java.util.UUID;
 
@@ -22,6 +26,7 @@ public class PlayerServiceImpl implements PlayerService {
     }
 
     @Override
+    @WithSession
     public Uni<MicroHumanDTO> getPlayerById(UUID playerId){
         return repository.findById(playerId)
                 .onItem().ifNull().failWith(()-> new NotFoundException("MicroHuman not found with ID: " + playerId))
@@ -29,6 +34,17 @@ public class PlayerServiceImpl implements PlayerService {
     }
 
     @Override
+    @WithTransaction
+    public Uni<MicroHumanDTO> createHuman(CreateHumanRequest request) {
+        MicroHumanEntity newHuman = new MicroHumanEntity();
+        newHuman.name = request.name();
+        newHuman.sex = request.sex();
+        return repository.persist(newHuman)
+                .onItem().transform(MicroHumanDTO::fromEntity);
+    }
+
+    @Override
+    @WithTransaction
     public Uni<MicroHumanDTO> hungerBalance(UUID playerId, int hungerLevels) {
         return repository.findById(playerId)
                 .onItem().ifNull().failWith(() -> new NotFoundException("Human not found with ID: " + playerId))
@@ -42,6 +58,7 @@ public class PlayerServiceImpl implements PlayerService {
     }
 
     @Override
+    @WithTransaction
     public Uni<MicroHumanDTO> energyBalance(UUID playerId, int energyLevels) {
         return repository.findById(playerId)
                 .onItem().ifNull().failWith(() -> new NotFoundException("Human not found with ID: " + playerId))
@@ -55,6 +72,7 @@ public class PlayerServiceImpl implements PlayerService {
     }
 
     @Override
+    @WithTransaction
     public Uni<MicroHumanDTO> desireBalance(UUID playerId, int desireLevels) {
         return repository.findById(playerId)
                 .onItem().ifNull().failWith(() -> new NotFoundException("Human not found with ID: " + playerId))
