@@ -1,68 +1,74 @@
-# code-with-quarkus
+🧬 MicroHumans - Player API
 
-This project uses Quarkus, the Supersonic Subatomic Java Framework.
+Microservicio backend responsable de gestionar el ciclo de vida, la creación y las estadísticas vitales (energía, hambre y deseo) de los jugadores. Construido bajo una arquitectura completamente reactiva y no bloqueante.
 
-If you want to learn more about Quarkus, please visit its website: <https://quarkus.io/>.
+🚀 Stack Tecnológico
 
-## Running the application in dev mode
+Lenguaje: Java 21
+Framework: Quarkus
+Persistencia: Hibernate Reactive con Panache
+Base de Datos: PostgreSQL 15
+Infraestructura: Docker Compose
 
-You can run your application in dev mode that enables live coding using:
+🛠️ Configuración y Despliegue Local
 
-```shell script
-./mvnw quarkus:dev
-```
+Requisitos Previos
 
-> **_NOTE:_**  Quarkus now ships with a Dev UI, which is available in dev mode only at <http://localhost:8080/q/dev/>.
+Docker instalado y en ejecución.
 
-## Packaging and running the application
+JDK 21 configurado en tu entorno.
 
-The application can be packaged using:
+Levantar la Base de Datos
+El proyecto incluye un archivo docker-compose.yml preconfigurado. Para iniciar el contenedor, ejecuta en la raíz del proyecto:
 
-```shell script
+docker compose up -d
+
+Nota: Esto levantará una instancia de PostgreSQL en el puerto 5432, creando automáticamente la base de datos microhumans con el usuario postgres.
+
+Arrancar el Servidor
+Ejecuta la aplicación en modo desarrollo (live coding activado):
+
+./mvnw compile quarkus:dev
+
+Nota: Hibernate ORM está configurado en modo update. Al arrancar el servidor, verificará el esquema y generará las tablas correspondientes automáticamente si no existen.
+
+📖 Documentación de la API (Swagger UI)
+
+El microservicio cuenta con documentación interactiva autogenerada mediante OpenAPI 3.1. Una vez que la aplicación esté corriendo, accede a través de tu navegador a:
+http://localhost:8080/q/swagger-ui/
+
+Resumen de Endpoints (/api/v1/players)
+
+POST /
+Da nacimiento a un nuevo jugador.
+Body: { "name": "string", "sex": "string" }
+
+GET /{id}
+Consulta el estado actual de las barras del jugador.
+
+PUT /{id}/energy
+Incrementa o decrementa la energía.
+Body: { "levels": -2 }
+
+PUT /{id}/hunger
+Incrementa o decrementa el hambre.
+Body: { "levels": 3 }
+
+PUT /{id}/desire
+Incrementa o decrementa el deseo.
+Body: { "levels": 1 }
+
+📦 Compilación para Producción
+
+Empaquetado Estándar (JVM)
+Para compilar la aplicación y prepararla para producción en la Máquina Virtual de Java:
+
 ./mvnw package
-```
 
-It produces the `quarkus-run.jar` file in the `target/quarkus-app/` directory.
-Be aware that it’s not an _über-jar_ as the dependencies are copied into the `target/quarkus-app/lib/` directory.
+Esto genera el archivo quarkus-run.jar en la carpeta target/quarkus-app/.
+Puedes ejecutarlo con: java -jar target/quarkus-app/quarkus-run.jar
 
-The application is now runnable using `java -jar target/quarkus-app/quarkus-run.jar`.
+Ejecutable Nativo (GraalVM)
+Para compilar un binario nativo que consume una fracción de la memoria RAM y arranca en milisegundos:
 
-If you want to build an _über-jar_, execute the following command:
-
-```shell script
-./mvnw package -Dquarkus.package.jar.type=uber-jar
-```
-
-The application, packaged as an _über-jar_, is now runnable using `java -jar target/*-runner.jar`.
-
-## Creating a native executable
-
-You can create a native executable using:
-
-```shell script
 ./mvnw package -Dnative
-```
-
-Or, if you don't have GraalVM installed, you can run the native executable build in a container using:
-
-```shell script
-./mvnw package -Dnative -Dquarkus.native.container-build=true
-```
-
-You can then execute your native executable with: `./target/code-with-quarkus-1.0.0-SNAPSHOT-runner`
-
-If you want to learn more about building native executables, please consult <https://quarkus.io/guides/maven-tooling>.
-
-## Related Guides
-
-- SmallRye OpenAPI ([guide](https://quarkus.io/guides/openapi-swaggerui)): Generate OpenAPI schemas and serve Swagger UI for REST API documentation
-- REST Jackson ([guide](https://quarkus.io/guides/rest#json-serialisation)): Jackson serialization support for Quarkus REST. This extension is not compatible with the quarkus-resteasy extension, or any of the extensions that depend on it
-- Reactive PostgreSQL client ([guide](https://quarkus.io/guides/reactive-sql-clients)): Connect to the PostgreSQL database using the reactive pattern
-
-## Provided Code
-
-### REST
-
-Easily start your REST Web Services
-
-[Related guide section...](https://quarkus.io/guides/getting-started-reactive#reactive-jax-rs-resources)
